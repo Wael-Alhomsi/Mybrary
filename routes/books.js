@@ -9,11 +9,10 @@ const uploadPath = path.join('public', Book.coverImageBasePath)
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
 
 const Author = require('../models/author')
-// const { escape } = require('querystring')
 const upload = multer({
     dest: uploadPath,
     fileFilter: (req, file, callback) => {
-        console.log(file.mimetype)
+        // console.log(file.mimetype)
         callback(null, imageMimeTypes.includes(file.mimetype))
     }
 })
@@ -32,11 +31,14 @@ router.get('/', async (req, res) => {
     }
     try{
         const books = await query.exec()
+        // console.log(`books from books: ${books}`)
+        // throw new Error('tizi')
         res.render('books/index', {
             books: books,
             searchOptions: req.query
         })
-    } catch {
+    } catch (err) {
+        console.log(`err ${err.message}`)
         res.redirect('/')
     }
     // res.render('books/new')
@@ -84,6 +86,7 @@ async function renderNewPage(res, book, hasError = false){
             authors: authors,
             book: book
         }
+        // throw new Error('tizi222')
         if (hasError) params.errorMessage = 'Error Creating Book'
         res.render('books/new', params)
     } catch {
