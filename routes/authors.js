@@ -90,12 +90,17 @@ router.delete('/:id', async (req, res) => {
         if (booksByAuthor.length == 0) {
             author = await Author.findById(req.params.id)
             await author.deleteOne()
+            res.redirect(`/authors`)
+        } else {
+            // console.log('This author has books still')
+            // req.app.locals.errorMessage = 'This author has books still'
+            res.redirect(`/authors`)
+            // const authors = await Author.find({})
+            // res.render('authors/index', {authors: authors,
+            //     searchOptions: {errorMessage: 'This author has books still'}})
         }
-        // await Author.findByIdAndDelete(req.params.id)
-        // await Author.findOneAndDelete({id: req.params.id})
-        res.redirect(`/authors`)
-    } catch (err){
-        console.log(err.message)
+    } catch (e){
+        console.log(e.message)
         if (author == null) {
             res.redirect('/')
         } else {
